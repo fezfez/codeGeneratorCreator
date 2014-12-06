@@ -1,0 +1,34 @@
+{
+	"name" : "<?php echo $this->githubUserName; ?>/<?php echo $this->name; ?>",
+	"description" : "<?php echo $this->description; ?>",
+	"type" : "fezfez-code-generator",
+	"authors" : [{
+			"name" : "<?php echo $this->author; ?>",
+			"email" : "<?php echo $this->email; ?>"
+		}
+	],
+	"keywords" : [
+	    <?php echo implode('", ', $this->keywords); ?>
+	],
+	"homepage" : "https://github.com/<?php echo $this->githubUserName; ?>/<?php echo $this->name; ?>",
+	"license" : "MIT",
+	"require" : {
+		"php" : ">=5.4"
+	},
+	"require-dev" : {
+		"fezfez/code-generator" : "dev-master",
+		"phpunit/phpunit" : "4.2.*"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"<?php echo $this->name; ?>" : "src/"
+		}
+	},
+	"support" : {
+		"source" : "https://github.com/<?php echo $this->githubUserName; ?>/<?php echo $this->name; ?>",
+		"email" : "demonchaux.stephane@gmail.com",
+		"issues" : "https://github.com/<?php echo $this->githubUserName; ?>/<?php echo $this->name; ?>/issues",
+		"wiki" : "https://github.com/<?php echo $this->githubUserName; ?>/<?php echo $this->name; ?>/blob/master/README.md"
+	},
+	"minimum-stability" : "dev"
+}
