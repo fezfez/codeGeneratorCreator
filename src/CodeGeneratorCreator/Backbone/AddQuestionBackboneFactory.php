@@ -10,7 +10,6 @@
 namespace CodeGeneratorCreator\Backbone;
 
 use CrudGenerator\Context\ContextInterface;
-use CrudGenerator\Utils\FileManager;
 use CodeGeneratorCreator\Generator\GeneratorFileWorkerFactory;
 
 class AddQuestionBackboneFactory

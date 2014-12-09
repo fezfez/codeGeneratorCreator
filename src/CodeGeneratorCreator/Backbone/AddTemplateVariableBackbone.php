@@ -12,8 +12,6 @@ namespace CodeGeneratorCreator\Backbone;
 use CrudGenerator\Context\ContextInterface;
 use CrudGenerator\Context\SimpleQuestion;
 use CrudGenerator\Utils\FileManager;
-use CrudGenerator\View\ViewFactory;
-use CrudGenerator\Utils\TranstyperFactory;
 use CodeGeneratorCreator\Generator\GeneratorFileWorker;
 
 class AddTemplateVariableBackbone
@@ -32,8 +30,8 @@ class AddTemplateVariableBackbone
     private $generatorFileWorker = null;
 
     /**
-     * @param FileManager  $fileManager
-     * @param ContextInterface $context
+     * @param FileManager         $fileManager
+     * @param ContextInterface    $context
      * @param GeneratorFileWorker $generatorFileWorker
      */
     public function __construct(
@@ -67,10 +65,10 @@ class AddTemplateVariableBackbone
 
         $generator['templateVariables'][] = array(
             "variableName" => $variableName,
-            "value"        => $value
+            "value"        => $value,
         );
 
         $this->generatorFileWorker->putGeneratorJson($generatorName, $generator);
-        $this->context->log('Template variable succefully added on ' . $generatorName);
+        $this->context->log('Template variable succefully added on '.$generatorName);
     }
 }

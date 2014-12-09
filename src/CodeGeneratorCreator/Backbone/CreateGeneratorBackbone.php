@@ -26,7 +26,7 @@ class CreateGeneratorBackbone
     private $context = null;
 
     /**
-     * @param FileManager  $fileManager
+     * @param FileManager      $fileManager
      * @param ContextInterface $context
      */
     public function __construct(FileManager $fileManager, ContextInterface $context)
@@ -47,19 +47,18 @@ class CreateGeneratorBackbone
         $githubUserName = $this->context->ask(new SimpleQuestion('Github user name', 'github'));
         $generatorName  = $this->context->ask(new SimpleQuestion('ame of the new generator', 'name'));
 
-
         $this->fileManager->ifDirDoesNotExistCreate('./generators');
 
-        $this->fileManager->mkdir('./generators/' . $generatorName);
-        $this->fileManager->mkdir('./generators/' . $generatorName . '/src');
-        $this->fileManager->mkdir('./generators/' . $generatorName . '/src/' . $generatorName);
-        $this->fileManager->mkdir('./generators/' . $generatorName . '/src/' . $generatorName . '/Skeleton/' . $generatorName, true);
+        $this->fileManager->mkdir('./generators/'.$generatorName);
+        $this->fileManager->mkdir('./generators/'.$generatorName.'/src');
+        $this->fileManager->mkdir('./generators/'.$generatorName.'/src/'.$generatorName);
+        $this->fileManager->mkdir('./generators/'.$generatorName.'/src/'.$generatorName.'/Skeleton/'.$generatorName, true);
 
         $view = ViewFactory::getInstance();
 
         $this->fileManager->filePutsContent(
-            'generators/' . $generatorName . '/composer.json',
-            $view->render(__DIR__ . '/../Template/', 'composer.json.phtml', array(
+            'generators/'.$generatorName.'/composer.json',
+            $view->render(__DIR__.'/../Template/', 'composer.json.phtml', array(
                 'name'           => $generatorName,
                 'author'         => $author,
                 'email'          => $email,
@@ -70,14 +69,14 @@ class CreateGeneratorBackbone
 
         $baseGenerator = array(
             'name' => $generatorName,
-            'definition' => $description
+            'definition' => $description,
         );
 
         $this->fileManager->filePutsContent(
-            'generators/' . $generatorName . '/src/' . $generatorName . '/' . $generatorName . '.generator.json',
+            'generators/'.$generatorName.'/src/'.$generatorName.'/'.$generatorName.'.generator.json',
             json_encode($baseGenerator, JSON_PRETTY_PRINT)
         );
 
-        $this->context->log('Generator succefully created at generators/' . $generatorName);
+        $this->context->log('Generator succefully created at generators/'.$generatorName);
     }
 }

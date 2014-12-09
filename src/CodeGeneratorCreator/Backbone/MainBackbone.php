@@ -35,11 +35,11 @@ class MainBackbone
     private $context = null;
 
     /**
-     * @param CreateGeneratorBackbone $createGenerator
-     * @param AddFileBackbone $addFileBackbone
+     * @param CreateGeneratorBackbone     $createGenerator
+     * @param AddFileBackbone             $addFileBackbone
      * @param AddTemplateVariableBackbone $addTemplateVariableBackbone
-     * @param AddQuestionBackbone $addQuestionBackbone
-     * @param ContextInterface $context
+     * @param AddQuestionBackbone         $addQuestionBackbone
+     * @param ContextInterface            $context
      */
     public function __construct(
         CreateGeneratorBackbone $createGenerator,

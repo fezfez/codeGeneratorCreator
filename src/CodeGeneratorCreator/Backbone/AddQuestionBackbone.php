@@ -11,9 +11,6 @@ namespace CodeGeneratorCreator\Backbone;
 
 use CrudGenerator\Context\ContextInterface;
 use CrudGenerator\Context\SimpleQuestion;
-use CrudGenerator\Utils\FileManager;
-use CrudGenerator\View\ViewFactory;
-use CrudGenerator\Utils\TranstyperFactory;
 use CodeGeneratorCreator\Generator\GeneratorFileWorker;
 use CrudGenerator\Generators\Parser\Lexical\QuestionTypeEnum;
 use CrudGenerator\Context\QuestionWithPredefinedResponse;
@@ -32,7 +29,7 @@ class AddQuestionBackbone
     private $generatorFileWorker = null;
 
     /**
-     * @param ContextInterface $context
+     * @param ContextInterface    $context
      * @param GeneratorFileWorker $generatorFileWorker
      */
     public function __construct(
@@ -42,7 +39,6 @@ class AddQuestionBackbone
         $this->context             = $context;
         $this->generatorFileWorker = $generatorFileWorker;
     }
-
 
     /**
      * @return \CrudGenerator\Generators\GeneratorDataObject
@@ -95,7 +91,7 @@ class AddQuestionBackbone
 
             $newQuestion["response"] = array(
                 "default" => $defaultResponse,
-                'type'    => $typeResponse
+                'type'    => $typeResponse,
             );
         } elseif ($questionType !== QuestionTypeEnum::DIRECTORY) {
             $iterator        = $this->context->ask(new SimpleQuestion('iterator', 'iterator'));
@@ -111,7 +107,7 @@ class AddQuestionBackbone
                 'response' => array(
                     'type'    => $typeResponse,
                     'default' => $default,
-                )
+                ),
             );
 
             if ($questionType === QuestionTypeEnum::ITERATOR_WITH_PREDEFINED_RESPONSE) {
@@ -121,15 +117,14 @@ class AddQuestionBackbone
 
                     $newQuestion['iteration']['response'][] = array(
                         'text'     => $text,
-                        'response' => $response
+                        'response' => $response,
                     );
-
                 } while ($this->context->confirm('Do you want to add another predefined response', 'add_predefined_response'));
             }
         }
         $generator['questions'][] = $newQuestion;
 
         $this->generatorFileWorker->putGeneratorJson($generatorName, $generator);
-        $this->context->log('Question succefully created at generators/' . $generatorName);
+        $this->context->log('Question succefully created at generators/'.$generatorName);
     }
 }

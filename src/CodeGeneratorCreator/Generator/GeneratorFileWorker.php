@@ -25,7 +25,7 @@ class GeneratorFileWorker
 
     /**
      * @param FileManager $fileManager
-     * @param Transtyper $transtyper
+     * @param Transtyper  $transtyper
      */
     public function __construct(FileManager $fileManager, Transtyper $transtyper)
     {
@@ -34,7 +34,7 @@ class GeneratorFileWorker
     }
 
     /**
-     * @param string $generatorName
+     * @param  string                              $generatorName
      * @throws GeneratorNotWellConfiguredException
      */
     public function generatorWellConfigured($generatorName)
@@ -53,12 +53,12 @@ class GeneratorFileWorker
     }
 
     /**
-     * @param string $generatorName
+     * @param  string $generatorName
      * @return string
      */
     public function generatorJsonPath($generatorName)
     {
-        return $this->generateSrcPath($generatorName) . $generatorName . '.generator.json';
+        return $this->generateSrcPath($generatorName).$generatorName.'.generator.json';
     }
 
     /**
@@ -67,12 +67,13 @@ class GeneratorFileWorker
     public function getGeneratorJsonAsPhp($generatorName)
     {
         $this->generatorWellConfigured($generatorName);
+
         return $this->transtyper->decode($this->fileManager->fileGetContent($this->generatorJsonPath($generatorName)));
     }
 
     /**
      * @param string $generatorName
-     * @param array $data
+     * @param array  $data
      */
     public function putGeneratorJson($generatorName, array $data)
     {
@@ -83,20 +84,20 @@ class GeneratorFileWorker
     }
 
     /**
-     * @param string $generatorName
+     * @param  string $generatorName
      * @return string
      */
     public function generatorBasePath($generatorName)
     {
-        return 'generators/' . $generatorName;
+        return 'generators/'.$generatorName;
     }
 
     /**
-     * @param string $generatorName
+     * @param  string $generatorName
      * @return string
      */
     public function generateSrcPath($generatorName)
     {
-        return $this->generatorBasePath($generatorName) . '/src/' . $generatorName . '/';
+        return $this->generatorBasePath($generatorName).'/src/'.$generatorName.'/';
     }
 }

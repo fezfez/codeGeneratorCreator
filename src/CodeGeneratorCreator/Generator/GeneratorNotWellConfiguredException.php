@@ -11,5 +11,4 @@ namespace CodeGeneratorCreator\Generator;
 
 class GeneratorNotWellConfiguredException extends \Exception
 {
-
 }

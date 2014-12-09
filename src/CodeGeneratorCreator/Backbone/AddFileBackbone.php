@@ -12,8 +12,6 @@ namespace CodeGeneratorCreator\Backbone;
 use CrudGenerator\Context\ContextInterface;
 use CrudGenerator\Context\SimpleQuestion;
 use CrudGenerator\Utils\FileManager;
-use CrudGenerator\View\ViewFactory;
-use CrudGenerator\Utils\TranstyperFactory;
 use CodeGeneratorCreator\Generator\GeneratorFileWorker;
 
 class AddFileBackbone
@@ -32,8 +30,8 @@ class AddFileBackbone
     private $generatorFileWorker = null;
 
     /**
-     * @param FileManager  $fileManager
-     * @param ContextInterface $context
+     * @param FileManager         $fileManager
+     * @param ContextInterface    $context
      * @param GeneratorFileWorker $generatorFileWorker
      */
     public function __construct(
@@ -45,7 +43,6 @@ class AddFileBackbone
         $this->context             = $context;
         $this->generatorFileWorker = $generatorFileWorker;
     }
-
 
     /**
      * @return \CrudGenerator\Generators\GeneratorDataObject
@@ -70,12 +67,12 @@ class AddFileBackbone
         $generator['fileList'][] = array(
             "templatePath"    => $description,
             "destinationPath" => $destination,
-            "description"     => $description
+            "description"     => $description,
         );
 
-        $this->context->log('Create template path at ' . $generatorBasePath . '/Skeleton/' . $templatePath);
-        $this->fileManager->filePutsContent($generatorBasePath . '/Skeleton/' . $templatePath . '.phtml', '');
+        $this->context->log('Create template path at '.$generatorBasePath.'/Skeleton/'.$templatePath);
+        $this->fileManager->filePutsContent($generatorBasePath.'/Skeleton/'.$templatePath.'.phtml', '');
         $this->generatorFileWorker->putGeneratorJson($generatorName, $generator);
-        $this->context->log('Generator succefully created at generators/' . $generatorName);
+        $this->context->log('Generator succefully created at generators/'.$generatorName);
     }
 }

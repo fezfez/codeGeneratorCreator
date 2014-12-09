@@ -16,7 +16,7 @@ use CodeGeneratorCreator\Generator\GeneratorFileWorkerFactory;
 class AddTemplateVariableBackboneFactory
 {
     /**
-     * @param  ContextInterface $context
+     * @param  ContextInterface            $context
      * @return AddTemplateVariableBackbone
      */
     public static function getInstance(ContextInterface $context)
