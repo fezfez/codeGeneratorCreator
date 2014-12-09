@@ -10,21 +10,20 @@
 namespace CodeGeneratorCreator\Backbone;
 
 use CrudGenerator\Context\ContextInterface;
+use CrudGenerator\Utils\FileManager;
+use CodeGeneratorCreator\Generator\GeneratorFileWorkerFactory;
 
-class MainBackboneFactory
+class AddQuestionBackboneFactory
 {
     /**
-     * @param  ContextInterface                     $context
-     * @return \CrudGenerator\Backbone\MainBackbone
+     * @param  ContextInterface $context
+     * @return CreateGenerator
      */
     public static function getInstance(ContextInterface $context)
     {
-        return new MainBackbone(
-            CreateGeneratorBackboneFactory::getInstance($context),
-            AddFileBackboneFactory::getInstance($context),
-            AddTemplateVariableBackboneFactory::getInstance($context),
-            AddQuestionBackboneFactory::getInstance($context),
-            $context
+        return new AddQuestionBackbone(
+            $context,
+            GeneratorFileWorkerFactory::getInstance()
         );
     }
 }

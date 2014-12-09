@@ -26,6 +26,10 @@ class MainBackbone
      */
     private $addTemplateVariableBackbone = null;
     /**
+     * @var AddQuestionBackbone
+     */
+    private $addQuestionBackbone = null;
+    /**
      * @var ContextInterface
      */
     private $context = null;
@@ -34,18 +38,21 @@ class MainBackbone
      * @param CreateGeneratorBackbone $createGenerator
      * @param AddFileBackbone $addFileBackbone
      * @param AddTemplateVariableBackbone $addTemplateVariableBackbone
+     * @param AddQuestionBackbone $addQuestionBackbone
      * @param ContextInterface $context
      */
     public function __construct(
         CreateGeneratorBackbone $createGenerator,
         AddFileBackbone $addFileBackbone,
         AddTemplateVariableBackbone $addTemplateVariableBackbone,
+        AddQuestionBackbone $addQuestionBackbone,
         ContextInterface $context
     ) {
-        $this->createGenerator = $createGenerator;
-        $this->addFileBackbone = $addFileBackbone;
+        $this->createGenerator             = $createGenerator;
+        $this->addFileBackbone             = $addFileBackbone;
         $this->addTemplateVariableBackbone = $addTemplateVariableBackbone;
-        $this->context         = $context;
+        $this->addQuestionBackbone         = $addQuestionBackbone;
+        $this->context                     = $context;
     }
 
     public function run()
@@ -63,6 +70,14 @@ class MainBackbone
             'add-file',
             function () {
                 $this->addFileBackbone->run();
+            }
+        );
+
+        $this->context->menu(
+            'Add question to an existing generator',
+            'add-question',
+            function () {
+                $this->addQuestionBackbone->run();
             }
         );
 
