@@ -11,37 +11,45 @@ namespace CodeGeneratorCreator\Backbone;
 
 use CrudGenerator\Context\ContextInterface;
 use CrudGenerator\Context\SimpleQuestion;
-use CrudGenerator\Utils\FileManager;
 use CodeGeneratorCreator\Generator\GeneratorFileWorker;
+use CodeGeneratorCreator\Generator\AskGenerator;
+use CodeGeneratorCreator\Generator\AskQuestionWithExpressionValidator;
 
 class AddFileBackbone
 {
-    /**
-     * @var FileManager
-     */
-    private $fileManager = null;
     /**
      * @var ContextInterface
      */
     private $context = null;
     /**
+     * @var AskQuestionWithExpressionValidator
+     */
+    private $askQuestionWithExpressionValidator = null;
+    /**
      * @var GeneratorFileWorker
      */
     private $generatorFileWorker = null;
+    /**
+     * @var AskGenerator
+     */
+    private $askGenerator = null;
 
     /**
-     * @param FileManager         $fileManager
-     * @param ContextInterface    $context
-     * @param GeneratorFileWorker $generatorFileWorker
+     * @param ContextInterface                   $context
+     * @param AskQuestionWithExpressionValidator $askQuestionWithExpressionValidator
+     * @param GeneratorFileWorker                $generatorFileWorker
+     * @param AskGenerator                       $askGenerator
      */
     public function __construct(
-        FileManager $fileManager,
         ContextInterface $context,
-        GeneratorFileWorker $generatorFileWorker
+        AskQuestionWithExpressionValidator $askQuestionWithExpressionValidator,
+        GeneratorFileWorker $generatorFileWorker,
+        AskGenerator $askGenerator
     ) {
-        $this->fileManager         = $fileManager;
-        $this->context             = $context;
-        $this->generatorFileWorker = $generatorFileWorker;
+        $this->context                            = $context;
+        $this->askQuestionWithExpressionValidator = $askQuestionWithExpressionValidator;
+        $this->generatorFileWorker                = $generatorFileWorker;
+        $this->askGenerator                       = $askGenerator;
     }
 
     /**
@@ -49,30 +57,15 @@ class AddFileBackbone
      */
     public function run()
     {
-        $generatorName  = $this->context->ask(new SimpleQuestion('Generator name', 'name'));
-
-        $this->generatorFileWorker->generatorWellConfigured($generatorName);
-
-        $generatorBasePath = $this->generatorFileWorker->generateSrcPath($generatorName);
-        $generator         = $this->generatorFileWorker->getGeneratorJsonAsPhp($generatorName);
-
-        if (array_key_exists('fileList', $generator) === false) {
-            $generator['fileList'] = array();
-        }
-
+        $generator    = $this->askGenerator->ask();
+        $destination  = $this->askQuestionWithExpressionValidator->ask(new SimpleQuestion('Destination path', 'destination'), $generator);
         $templatePath = $this->context->ask(new SimpleQuestion('Template path', 'template_path'));
         $description  = $this->context->ask(new SimpleQuestion('File description', 'description'));
-        $destination  = $this->context->ask(new SimpleQuestion('Destination path', 'destination'));
 
-        $generator['fileList'][] = array(
-            "templatePath"    => $description,
-            "destinationPath" => $destination,
-            "description"     => $description,
+        $this->generatorFileWorker->persist(
+            $generator->addFile($templatePath, $destination, $description)
         );
 
-        $this->context->log('Create template path at '.$generatorBasePath.'/Skeleton/'.$templatePath);
-        $this->fileManager->filePutsContent($generatorBasePath.'/Skeleton/'.$templatePath.'.phtml', '');
-        $this->generatorFileWorker->putGeneratorJson($generatorName, $generator);
-        $this->context->log('Generator succefully created at generators/'.$generatorName);
+        $this->context->log('File succefully created at generators/'.$generatorName);
     }
 }

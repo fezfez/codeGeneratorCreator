@@ -11,37 +11,45 @@ namespace CodeGeneratorCreator\Backbone;
 
 use CrudGenerator\Context\ContextInterface;
 use CrudGenerator\Context\SimpleQuestion;
-use CrudGenerator\Utils\FileManager;
 use CodeGeneratorCreator\Generator\GeneratorFileWorker;
+use CodeGeneratorCreator\Generator\AskQuestionWithExpressionValidator;
+use CodeGeneratorCreator\Generator\AskGenerator;
 
 class AddTemplateVariableBackbone
 {
-    /**
-     * @var FileManager
-     */
-    private $fileManager = null;
     /**
      * @var ContextInterface
      */
     private $context = null;
     /**
+     * @var AskQuestionWithExpressionValidator
+     */
+    private $askQuestionWithExpressionValidator = null;
+    /**
      * @var GeneratorFileWorker
      */
     private $generatorFileWorker = null;
+    /**
+     * @var AskGenerator
+     */
+    private $askGenerator = null;
 
     /**
-     * @param FileManager         $fileManager
-     * @param ContextInterface    $context
-     * @param GeneratorFileWorker $generatorFileWorker
+     * @param ContextInterface                   $context
+     * @param AskQuestionWithExpressionValidator $askQuestionWithExpressionValidator
+     * @param GeneratorFileWorker                $generatorFileWorker
+     * @param AskGenerator                       $askGenerator
      */
     public function __construct(
-        FileManager $fileManager,
         ContextInterface $context,
-        GeneratorFileWorker $generatorFileWorker
+        AskQuestionWithExpressionValidator $askQuestionWithExpressionValidator,
+        GeneratorFileWorker $generatorFileWorker,
+        AskGenerator $askGenerator
     ) {
-        $this->fileManager         = $fileManager;
-        $this->context             = $context;
-        $this->generatorFileWorker = $generatorFileWorker;
+        $this->context                            = $context;
+        $this->askQuestionWithExpressionValidator = $askQuestionWithExpressionValidator;
+        $this->generatorFileWorker                = $generatorFileWorker;
+        $this->askGenerator                       = $askGenerator;
     }
 
     /**
@@ -49,26 +57,14 @@ class AddTemplateVariableBackbone
      */
     public function run()
     {
-        $generatorName  = $this->context->ask(new SimpleQuestion('Generator name', 'name'));
-
-        $this->generatorFileWorker->generatorWellConfigured($generatorName);
-
-        $generatorBasePath = $this->generatorFileWorker->generatorBasePath($generatorName);
-        $generator         = $this->generatorFileWorker->getGeneratorJsonAsPhp($generatorName);
-
-        if (is_array($generator['templateVariables']) === false) {
-            $generator['templateVariables'] = array();
-        }
-
+        $generator    = $this->askGenerator->ask();
         $variableName = $this->context->ask(new SimpleQuestion('Variable name', 'variableName'));
-        $value        = $this->context->ask(new SimpleQuestion('Value', 'value'));
+        $value        = $this->askQuestionWithExpressionValidator->ask(new SimpleQuestion('Value', 'value'));
 
-        $generator['templateVariables'][] = array(
-            "variableName" => $variableName,
-            "value"        => $value,
+        $this->generatorFileWorker->persist(
+            $generator->addTemplateVariable($variableName, $value, $description)
         );
 
-        $this->generatorFileWorker->putGeneratorJson($generatorName, $generator);
         $this->context->log('Template variable succefully added on '.$generatorName);
     }
 }

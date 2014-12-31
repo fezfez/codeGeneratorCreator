@@ -7,20 +7,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace CodeGeneratorCreator\Backbone;
+namespace CodeGeneratorCreator\Generator;
 
 use CrudGenerator\Context\ContextInterface;
-use CodeGeneratorCreator\Generator\GeneratorFileWorkerFactory;
 
-class CreateGeneratorBackboneFactory
+class AskGeneratorFactory
 {
     /**
-     * @param  ContextInterface $context
-     * @return CreateGenerator
+     * @param Context $context
      */
     public static function getInstance(ContextInterface $context)
     {
-        return new CreateGeneratorBackbone(
+        return new AskGenerator(
             GeneratorFileWorkerFactory::getInstance(),
             $context
         );

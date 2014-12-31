@@ -11,27 +11,27 @@ namespace CodeGeneratorCreator\Backbone;
 
 use CrudGenerator\Context\ContextInterface;
 use CrudGenerator\Context\SimpleQuestion;
-use CrudGenerator\Utils\FileManager;
-use CrudGenerator\View\ViewFactory;
+use CodeGeneratorCreator\Generator\Generator;
+use CodeGeneratorCreator\Generator\GeneratorFileWorker;
 
 class CreateGeneratorBackbone
 {
     /**
-     * @var FileManager
+     * @var GeneratorFileWorker
      */
-    private $fileManager = null;
+    private $generatorFileWorker = null;
     /**
      * @var ContextInterface
      */
     private $context = null;
 
     /**
-     * @param FileManager      $fileManager
-     * @param ContextInterface $context
+     * @param GeneratorFileWorker $generatorFileWorker
+     * @param ContextInterface    $context
      */
-    public function __construct(FileManager $fileManager, ContextInterface $context)
+    public function __construct(GeneratorFileWorker $generatorFileWorker, ContextInterface $context)
     {
-        $this->fileManager = $fileManager;
+        $this->generatorFileWorker = $generatorFileWorker;
         $this->context     = $context;
     }
 
@@ -40,43 +40,17 @@ class CreateGeneratorBackbone
      */
     public function run()
     {
-        $author         = $this->context->ask(new SimpleQuestion('Author name', 'author'));
-        $email          = $this->context->ask(new SimpleQuestion('Email', 'email'));
-        $description    = $this->context->ask(new SimpleQuestion('Description', 'description'));
-        $keywords       = explode(',', $this->context->ask(new SimpleQuestion('Keywords', 'keywords')));
-        $githubUserName = $this->context->ask(new SimpleQuestion('Github user name', 'github'));
-        $generatorName  = $this->context->ask(new SimpleQuestion('ame of the new generator', 'name'));
+        $generator = new Generator();
 
-        $this->fileManager->ifDirDoesNotExistCreate('./generators');
+        $generator->setAuthor($this->context->ask(new SimpleQuestion('Author name', 'author')));
+        $generator->setEmail($this->context->ask(new SimpleQuestion('Email', 'email')));
+        $generator->setDescription($this->context->ask(new SimpleQuestion('Description', 'description')));
+        $generator->setKeywords(explode(',', $this->context->ask(new SimpleQuestion('Keywords', 'keywords'))));
+        $generator->setGithubUserName($this->context->ask(new SimpleQuestion('Github user name', 'github')));
+        $generator->setName($this->context->ask(new SimpleQuestion('Name of the new generator', 'name')));
 
-        $this->fileManager->mkdir('./generators/'.$generatorName);
-        $this->fileManager->mkdir('./generators/'.$generatorName.'/src');
-        $this->fileManager->mkdir('./generators/'.$generatorName.'/src/'.$generatorName);
-        $this->fileManager->mkdir('./generators/'.$generatorName.'/src/'.$generatorName.'/Skeleton/'.$generatorName, true);
+        $this->generatorFileWorker->create($generator);
 
-        $view = ViewFactory::getInstance();
-
-        $this->fileManager->filePutsContent(
-            'generators/'.$generatorName.'/composer.json',
-            $view->render(__DIR__.'/../Template/', 'composer.json.phtml', array(
-                'name'           => $generatorName,
-                'author'         => $author,
-                'email'          => $email,
-                'description'    => $description,
-                'githubUserName' => $githubUserName,
-                'keywords'       => $keywords,
-        )));
-
-        $baseGenerator = array(
-            'name' => $generatorName,
-            'definition' => $description,
-        );
-
-        $this->fileManager->filePutsContent(
-            'generators/'.$generatorName.'/src/'.$generatorName.'/'.$generatorName.'.generator.json',
-            json_encode($baseGenerator, JSON_PRETTY_PRINT)
-        );
-
-        $this->context->log('Generator succefully created at generators/'.$generatorName);
+        $this->context->log('Generator succefully created at generators/'.$generator->getName());
     }
 }

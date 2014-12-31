@@ -10,8 +10,9 @@
 namespace CodeGeneratorCreator\Backbone;
 
 use CrudGenerator\Context\ContextInterface;
-use CrudGenerator\Utils\FileManager;
 use CodeGeneratorCreator\Generator\GeneratorFileWorkerFactory;
+use CodeGeneratorCreator\Generator\AskQuestionWithExpressionValidatorFactory;
+use CodeGeneratorCreator\Generator\AskGeneratorFactory;
 
 class AddTemplateVariableBackboneFactory
 {
@@ -22,9 +23,10 @@ class AddTemplateVariableBackboneFactory
     public static function getInstance(ContextInterface $context)
     {
         return new AddTemplateVariableBackbone(
-            new FileManager(),
             $context,
-            GeneratorFileWorkerFactory::getInstance()
+            AskQuestionWithExpressionValidatorFactory::getInstance($context),
+            GeneratorFileWorkerFactory::getInstance(),
+            AskGeneratorFactory::getInstance($context)
         );
     }
 }
